@@ -1,0 +1,4 @@
+`volo install` will install packages here.
+
+`package.json` "dependencies" are jetpack dependencies that resolve here.
+

@@ -1,0 +1,10 @@
+<html>
+<body>
+<h1>Mozilla Study Participation Page</h1>
+<form onSubmit="addon.port.emit('useremail',{email:document.getElementById('emailfield').value})">
+	E-mail: <input id="emailfield" type="email" name="useremail"><br>
+	<input type="submit" onClick="addon.port.emit('useremail',{email:document.getElementById('emailfield').value})" onSubmit="addon.port.emit('useremail',{email:document.getElementById('emailfield').value})">
+</form>
+</body>
+</html>
+

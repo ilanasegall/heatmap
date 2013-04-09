@@ -1,0 +1,32 @@
+{
+  "name": "micropilot-template",
+  "license": "MPL 2.0",
+  "author": "Gregg Lind",
+  "source": "https://github.com/gregglind/micrpilot-template",
+  "version": "0.1.0",
+  "fullName": "micropilot study template",
+  "id": "micropilot-template@ux.mozilla.com",
+  "description": "Example Micropilot Based Study",
+  "dependencies": [
+    "micropilot"
+  ],
+  "preferences": [
+    {
+      "name": "micropilot-userdemographics",
+      "label": "update",
+      "title": "Study Participant Demographics",
+      "type": "control"
+    },
+    {
+      "name": "micropilot-data",
+      "label": "data",
+      "title": "View Collected Data",
+      "type": "control"
+    }
+  ],
+  "volo": {
+    "dependencies": {
+      "packages/micropilot": "github:gregglind/micropilot/v0.8"
+    }
+  }
+}
