@@ -1,0 +1,57 @@
+life and death of tab - on, activate, focus
+location bar - all domains
+maneuvering buttons
+
+
+
+trackpad swipes
+window "command"
+urlbar listener
+url change, onlocationchange
+mouse-driven, key-command driven menus
+command set
+pin/unpin tab
+tab context menu
+context menu
+about:home visits
+newtab-toggle
+ff whatsnew page
+direct to google.com
+chrome button ids (toolbar items), including location, custom toolbars (is a place to get all)
+site id button
+search box 
+search engine dropdown
+bookmark toolbar
+ffbutton windows
+url go button
+tab bar actions
+bookmark popup panel
+new window opened
+mixed content warning (ask Larissa)
+tabs moving
+
+newtab, scroll right or left
+
+prefs changed
+
+privacy window (will have to check old vs new versions), when window opens, should track its privacy
+menu items clicked
+
+
+keyboard shortcuts
+
+find bar (ctrl f or /)
+
+tab dies - by x or by ctrl w or by window
+--> explore death sequence
+--> on startup, look at configuration
+
+
+
+
+
+(search)
+looks like previous search 
+urls look like search
+
+(panorama)
