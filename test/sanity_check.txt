@@ -1,2 +1,7 @@
 Heatmap Sanity Check
 on tab open.............Tab opened: id
+
+//selenium, prove record
+
+
+adi - active daily installs, count of unique profile ids called home to call for update
