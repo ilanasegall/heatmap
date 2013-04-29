@@ -47,6 +47,8 @@ tab dies - by x or by ctrl w or by window
 --> on startup, look at configuration
 
 
+//getChromeWindow
+//getOwnerWindow
 
 
 
@@ -55,3 +57,34 @@ looks like previous search
 urls look like search
 
 (panorama)
+
+/*let basicWinEvents = function(){
+	windows.on('open', function onOpen(win) {
+		win = getMostRecentBrowserWindow();
+		console.log(isBrowser(win));
+
+		if (!isBrowser(win)) return;
+		emit({
+			"group": "windows",
+			"win_id": getOuterId(win)
+		});
+	});
+	windows.on('close', function(win) {
+		emit({
+			"group": "windows",
+			"win_id": getOuterId(win)
+		});
+	});
+	windows.on('open', function(win) {
+		emit({
+			"group": "windows",
+			"win_id": getOuterId(win)
+		});
+	});
+	windows.on('open', function(win) {
+		emit({
+			"group": "windows",
+			"win_id": getOuterId(win)
+		});
+	});
+}();*/
