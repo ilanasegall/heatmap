@@ -65,7 +65,7 @@ exports.metadata = {
   through to covered code :/
 */
 try {
-  require("indexed-db");
+  require("./indexed-db");
   require("./indexed-db-17");
 } catch (e){}
 
@@ -82,7 +82,8 @@ if (xulApp.versionInRange(xulApp.version,17,18)) { // 17 only
 } else {
   var { indexedDB } = require('indexed-db');
 }
-const observer = require("observer-service");
+
+const observer = require("sdk/system/events");
 const myprefs = require("simple-prefs").prefs;
 const Request = require("request").Request;
 const {storage} = require("simple-storage");
@@ -437,7 +438,7 @@ let Micropilot = exports.Micropilot = Class({
     return this;
   },
 
-  /** (internal) watch a topic, add to `observer-service`
+  /** (internal) watch a topic, add to `observer-service`, parse json if possible
    *
    * @param {string} topic topic to watch.
    * @memberOf Micropilot
@@ -450,15 +451,38 @@ let Micropilot = exports.Micropilot = Class({
     let that = this;
     let cb;
     if (this._watchfn !== undefined){
-      cb = function(subject,data) that._watchfn.call(that,topic,subject,data);
+      cb = function(evt) that._watchfn.call(that,evt);
     } else {
-      cb = function(subject,data) {that.record({"msg":topic,ts:Date.now(),"subject":subject,"data":data})};
+      let objstring = ({}).toString();
+      cb = function(evt) {
+        // json if possible https://github.com/gregglind/micropilot/issues/21
+        let obj = {"msg":evt.type,ts:Date.now()};
+        ["subject", "data"].forEach(function (k) {
+          obj[k] = evt[k];
+          try{ obj[k] = JSON.parse(obj[k]) } catch (e) {}
+          // obj[k] == objstring # true by type casting!  WUT?
+          if (typeof obj[k] == "string" && obj[k] == objstring){
+            throw Array.join(["Micropilot Serialization Error:",evt.type, k,"serialized as Object.toString() rather than JSON"]," ")
+          }
+        })
+        that.record(obj);
+      };
     }
-    let o = observer.add(topic,cb); // add to global watch list
+    let o = observer.on(topic,cb); // add to global watch list
     this._watched[topic] = cb;
   },
 
   /** add topics to watch (non-destructive)
+    *
+    * `watch` is a simplified wrapper around `record` with these features
+    *
+    * - watch the observer service
+    * - record messages as
+    *
+    *   - `msg`: topic
+    *   - `ts`:  Date.now()
+    *   - `subject`: JSON.parse(subject) or subject
+    *   - `data`: JSON.parse(data) or data
     *
     * @param {array} watch_list list of topics
     * @return {micropilot} this
@@ -478,7 +502,7 @@ let Micropilot = exports.Micropilot = Class({
     */
   _unwatch: function(topic){
     let cb = this._watched[topic];
-    cb && observer.remove(topic,cb);
+    cb && observer.off(topic,cb);
     delete this._watched[topic];
   },
 
