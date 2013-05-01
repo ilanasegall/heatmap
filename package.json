@@ -7,7 +7,9 @@
   "fullName": "micropilot study template",
   "id": "micropilot-template@ux.mozilla.com",
   "description": "Example Micropilot Based Study",
-  "permissions": {"private-browsing": true},
+  "permissions": {
+    "private-browsing": true
+  },
   "dependencies": [
     "micropilot"
   ],
@@ -27,7 +29,7 @@
   ],
   "volo": {
     "dependencies": {
-      "packages/micropilot": "github:gregglind/micropilot/v0.8"
+      "packages/micropilot": "github:gregglind/micropilot/v0.9"
     }
   }
 }
