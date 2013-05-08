@@ -1,24 +1,30 @@
-"use strict";
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-let side_ads = $("#mbEnd").find("a"); 
 
-var top_ad_ids = $("#tads").find("a");
+$(function(){
 
-top_ad_ids.each(function(ind, val) {
-	console.log(ind);
-	console.log($(val).attr("id"));
+	var relatedto = $("#tvcap h2 b").text();
+
+	//$("#mbEnd, #tads").css("border","solid red 2px");
+
+	$("#mbEnd, #tads").find("a").on("click",function(e) {
+	  console.log("got one!");
+	  var OUT = {ts: Date.now(),group:"google-sem-ad-clicked"};
+	  var A = $(e.target).closest('a');
+	  var boxid = A.closest("#mbEnd, #tads").attr("id");
+	  OUT.text = A.text();
+	  OUT.target = A.attr("href");
+	  OUT.relatedto = relatedto;
+	  OUT.id = A.attr("id");
+	  OUT.terms = A.find("b").map(function() {return jQuery.text(this)} ).get();
+	  OUT.allterms = $(e.target).closest("ol").find("b").map(function() {return jQuery.text(this)} ).get();
+	  OUT.boxid = A.closest("#mbEnd, #tads").attr("id");
+	  OUT.which = ["top","side"][~~(boxid=="mbEnd")];
+	  //console.log("google-sem-ad-clicked",OUT);
+	  self.port.emit("google-sem-ad-clicked",OUT)
+		//return false;
+	});
+
 })
-
-
-document.body.onclick = function(e) {
-
-	console.log($(e.target).closest('a').attr("id"));
-
-//	console.log("desc of ad? " + $(e.target).parents("#tads").length > 0);
-//	console.log("desc of ad? " + $(e.target).parents($("#mbEnd")).length > 0);
-
-	//console.log("target id: "+e.target.id);
-	//console.log("closest a target id: "+ Object.keys(e.target.closest("a")));
-		//self.port.emit("search-form-submit", {search_term:document.getElementById("searchText").value, ts: ts.Date.now()});
-
-};
