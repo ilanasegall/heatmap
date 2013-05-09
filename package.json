@@ -1,12 +1,12 @@
 {
-  "name": "micropilot-template",
+  "name": "heatmap-micropilot",
   "license": "MPL 2.0",
   "author": "Gregg Lind",
   "source": "https://github.com/gregglind/micrpilot-template",
-  "version": "0.1.0",
-  "fullName": "micropilot study template",
+  "version": "0.2.0",
+  "fullName": "heatmap in micropilot",
   "id": "micropilot-template@ux.mozilla.com",
-  "description": "Example Micropilot Based Study",
+  "description": "Heatmap in micropilot!",
   "permissions": {
     "private-browsing": true
   },
