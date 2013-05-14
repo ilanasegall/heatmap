@@ -30,7 +30,7 @@
   "volo": {
     "dependencies": {
       "packages/micropilot": "github:gregglind/micropilot/v0.9",
-      "data/user-action/jquery": "github:jquery/jquery/2.0.0"
+      "data/user-actions/jquery": "github:jquery/jquery/2.0.0"
     }
   }
 }
