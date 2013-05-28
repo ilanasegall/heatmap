@@ -70,7 +70,7 @@ try {
 } catch (e){}
 
 /*!*/
-const { Cu } = require("chrome");
+const { Cc, Ci, Cu } = require("chrome");
 const xulApp = require('sdk/system/xul-app');
 
 const { Class } = require('sdk/core/heritage');
@@ -83,12 +83,21 @@ if (xulApp.versionInRange(xulApp.version,17,18)) { // 17 only
   var { indexedDB } = require('indexed-db');
 }
 
+exports.indexedDB = indexedDB;
+
 const observer = require("sdk/system/events");
 const myprefs = require("simple-prefs").prefs;
 const Request = require("request").Request;
 const {storage} = require("simple-storage");
 const timers = require("timers");
 const uuid = require('sdk/util/uuid').uuid;
+
+// handle misnaming bug in idb code;
+let moreindexeddb = {}
+Cc["@mozilla.org/dom/indexeddb/manager;1"].
+        getService(Ci.nsIIndexedDatabaseManager).
+        initWindowless(moreindexeddb);
+
 
 
 /** Random UUID as string, without braces.
@@ -265,10 +274,10 @@ let EventStore = exports.EventStore = Class({
     *
     * Resolves onsuccess (`request.result`)
     * @memberOf EventStore
-    * @name clear
+    * @name drop
     * @return promise
     */
-  clear: function(){
+  drop: function(){
     let that = this;
     let {promise, resolve} = defer();
     let req = indexedDB.deleteDatabase("micropilot-"+that.collection,1);
@@ -277,6 +286,25 @@ let EventStore = exports.EventStore = Class({
     }
     req.onerror = requestError;
     req.onblocked = requestBlocked;
+    return promise;
+  },
+  /** promises to clear the database for re-use.
+   *
+   * Resolves onsuccess (`request.result`)
+   * @memberOf EventStore
+   * @name clear
+   * @return promise
+   */
+  clear: function() {
+    let that = this;
+    let { promise, resolve } = defer();
+    this.db().then(function(db) {
+
+      let req = db.transaction([that.collection], "readwrite").objectStore(that.collection).clear();
+      req.onsuccess = function(event) { resolve(req.result); };
+      req.onerror = requestError;
+      req.onblocked = requestBlocked;
+    });
     return promise;
   }
 });
@@ -347,9 +375,18 @@ let Micropilot = exports.Micropilot = Class({
     */
   data: function() this.eventstore.getAll(),
 
-  /** promise to clear all data (by dropping the db)
+  /** promise to drop all data (by dropping the db)
     *
     * Resolve(`request.response`) // of the dropDatabse
+    * @memberOf Micropilot
+    * @name drop
+    * @return promise
+    */
+  drop: function() this.eventstore.drop(),
+
+  /** promise to clear all data but keep the db
+    *
+    * Resolve(`request.response`) // of the clear
     * @memberOf Micropilot
     * @name clear
     * @return promise
