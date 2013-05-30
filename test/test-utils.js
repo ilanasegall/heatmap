@@ -9,6 +9,7 @@ var utils = require("utils");
 var tabs = require("tabs");
 const {getTabs, getTabId, getOwnerWindow} = require("sdk/tabs/utils");
 const { getMostRecentBrowserWindow, getOuterId } = require("sdk/window/utils");
+const sysevents = require("sdk/system/events");
 
 exports["test utils"] = function(assert) {
     assert.pass("Utils unit test running!");
@@ -41,5 +42,23 @@ exports["test winIdFromTab"] = function(assert) {
     var winId = utils.winIdFromTab(wrappedTab);
     assert.equal(winId, getOuterId(chromeWindow));
 };
+
+exports["test emit valid object"] = function(assert, done) {
+    var obj = { 'test' : 'data', 'group' : 'unit-tests' };
+
+    // listen once for our system event
+    sysevents.once(utils.TOPIC, function(event) {
+        assert.ok(typeof event.subject !== undefined);
+        assert.ok(typeof event.data !== undefined);
+        var subject = event.subject,
+            data = event.data;
+        assert.ok(subject === null);
+        assert.equal(JSON.stringify(obj), data);
+        done();
+    });
+
+    var emitted = utils.emit(obj);
+    assert.ok(emitted !== null);
+}
 
 require("test").run(exports);
