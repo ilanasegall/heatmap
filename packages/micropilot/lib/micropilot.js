@@ -77,10 +77,9 @@ const { Class } = require('sdk/core/heritage');
 const { Collection } = require("collection");
 const { defer, promised, resolve } = require('api-utils/promise');
 if (xulApp.versionInRange(xulApp.version,17,18)) { // 17 only
-  var { indexedDB } = requireAny(['./indexed-db-17'],
-      "no indexed-db found.  If fx version < 18, include indexed-db-17.js in build.");
+  var { indexedDB } = require('./indexed-db-17')
 } else {
-  var { indexedDB } = require('indexed-db');
+  var { indexedDB } = require('./indexed-db');
 }
 
 exports.indexedDB = indexedDB;
